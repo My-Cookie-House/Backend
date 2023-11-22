@@ -20,6 +20,8 @@ fi
 
 echo "> 새 애플리케이션 배포"
 
+cd ..
+
 chmod +x CookieHouse-0.0.1-SNAPSHOT.jar
 
 nohup java -jar CookieHouse-0.0.1-SNAPSHOT.jar > $REPOSITORY/nohup.out 2>&1 &
