@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${{secrets.DB_JDBC_URL}}
-    username: ${{secrets.DB_USER}}
-    password: ${{secrets.DB_PASSWORD}}
+    url: ${DB_JDBC_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -14,14 +14,14 @@ spring:
       client:
         registration:
           google:
-            client-id: ${{secrets.GOOGLE_CLIENT_ID}}
-            client-secret: ${{secrets.GOOGLE_CLIENT_SECRET}}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/google
             scope: profile
           kakao:
-            client-id: ${{secrets.KAKAO_CLIENT_ID}}
-            client-secret: ${{secrets.KAKAO_CLIENT_SECRET}}
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             redirect-uri: http://127.0.0.1:5173/redirect
             scope: profile_nickname
@@ -35,12 +35,12 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
 jwt:
-  secret: ${{secrets.JWT_SECRET}}
+  secret: ${JWT_SECRET}
 cloud:
   aws:
     credentials:
-      access-key: ${{secrets.AWS_ACCESS_KEY}}
-      secret-key: ${{secrets.AWS_SECRET_KEY}}
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
     s3:
       bucket: cookiehouse-image
     region:
