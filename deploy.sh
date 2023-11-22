@@ -21,6 +21,6 @@ fi
 
 echo "> 새 애플리케이션 배포"
 
-chmod +x $PROJECT
+chmod +x /home/ec2-user/app/step2/CookieHouse-0.0.1-SNAPSHOT.jar
 
-nohup java -jar -Dspring.config.location=/home/ec2-user/app/step1/Backend/src/main/resources/application.yml $PROJECT > $REPOSITORY/nohup.out 2>&1 &
+nohup java -jar -Dspring.config.location=/home/ec2-user/app/step1/Backend/src/main/resources/application.yml /home/ec2-user/app/step2/CookieHouse-0.0.1-SNAPSHOT.jar > /home/ec2-user/app/step2/nohup.out 2>&1 &
