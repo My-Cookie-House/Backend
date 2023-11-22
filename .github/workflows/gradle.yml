@@ -47,13 +47,13 @@ jobs:
     - name: S3에 배포
       run: aws s3 cp deploy/cookiehouse.zip s3://cookie-house-build/cookiehouse.zip
 
-    # - name: AWS CodeDeploy를 사용한 배포
-    #   run: |
-    #     aws deploy create-deployment \
-    #       --application-name CookieHouse \
-    #       --deployment-group-name cookiehouse-group \
-    #       --s3-location bucket=cookie-house-build,key=cookiehouse.zip,bundleType=zip \
-    #       --region ap-northeast-2
+    - name: AWS CodeDeploy를 사용한 배포
+      run: |
+        aws deploy create-deployment \
+          --application-name cookie-house-t3 \
+          --deployment-group-name cookie-house-t3-group \
+          --s3-location bucket=cookie-house-build,key=cookiehouse.zip,bundleType=zip \
+          --region ap-northeast-2
 
     - name: Notify via Email
       run: echo "Notify via Email"  # 이메일 알림 로직을 추가하세요.
