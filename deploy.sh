@@ -1,7 +1,6 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/step2
-PROJECT=/home/ec2-user/app/step2/CookieHouse-0.0.1-SNAPSHOT.jar
 
 echo "> Build 파일 복사"
 
