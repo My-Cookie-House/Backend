@@ -2,8 +2,11 @@ package com.groom.cookiehouse.service.mission;
 
 import com.groom.cookiehouse.controller.dto.response.mission.MissionResponseDto;
 import com.groom.cookiehouse.domain.mission.Mission;
+import com.groom.cookiehouse.domain.mission.MissionComplete;
+import com.groom.cookiehouse.domain.user.User;
 import com.groom.cookiehouse.exception.ErrorCode;
 import com.groom.cookiehouse.exception.model.NotFoundException;
+import com.groom.cookiehouse.repository.MissionCompleteRepository;
 import com.groom.cookiehouse.repository.MissionRepository;
 import com.groom.cookiehouse.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +17,14 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MissionService {
 
     private final MissionRepository missionRepository;
+    private final MissionCompleteRepository missionCompleteRepository;
     private final UserRepository userRepository;
 
     @PostConstruct
@@ -88,15 +93,20 @@ public class MissionService {
     }
 
     public MissionResponseDto getTodayMission(Long userId) {
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER_EXCEPTION, ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage()));
         List<Mission> missions = missionRepository.findAllByDate(LocalDate.now());
         Mission mission = missions.get(0);
-
+        Optional<MissionComplete> missionComplete = missionCompleteRepository.findByUserAndMission(user, mission);
+        Long missionCompleteId = null;
+        if (missionComplete.isPresent()) {
+            missionCompleteId = missionComplete.get().getId();
+        }
         return MissionResponseDto.of(
                 mission.getId(),
                 mission.getDate(),
-                mission.getMessage()
+                mission.getMessage(),
+                missionCompleteId
         );
     }
 

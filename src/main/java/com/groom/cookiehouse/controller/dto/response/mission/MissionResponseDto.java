@@ -15,9 +15,10 @@ public class MissionResponseDto {
     private Long missionId;
     private LocalDate missionDate;
     private String missionMessage;
+    private Long missionCompleteId;
 
-    public static MissionResponseDto of(Long missionId, LocalDate missionDate, String missionMessage) {
-        return new MissionResponseDto(missionId, missionDate, missionMessage);
+    public static MissionResponseDto of(Long missionId, LocalDate missionDate, String missionMessage, Long missionCompleteId) {
+        return new MissionResponseDto(missionId, missionDate, missionMessage, missionCompleteId);
     }
 
 }
