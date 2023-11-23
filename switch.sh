@@ -12,5 +12,5 @@ function switch_proxy() {
     echo "set \$service_url http://15.165.26.226:${IDLE_PORT};" | sudo tee /etc/nginx/conf.d/service-url.inc
 
     echo "> 엔진엑스 Reload"
-    sudo service nginx reload
+    sudo systemctl reload nginx
 }
