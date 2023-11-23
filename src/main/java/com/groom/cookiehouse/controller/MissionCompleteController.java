@@ -4,8 +4,8 @@ import com.groom.cookiehouse.common.dto.BaseResponse;
 import com.groom.cookiehouse.config.resolver.UserId;
 import com.groom.cookiehouse.controller.dto.request.mission.MissionCompleteRequestDto;
 import com.groom.cookiehouse.controller.dto.response.mission.CreateMissionCompleteResponseDto;
+import com.groom.cookiehouse.controller.dto.response.mission.ReadAllMissionCompleteResponseDto;
 import com.groom.cookiehouse.controller.dto.response.mission.ReadMissionCompleteResponseDto;
-import com.groom.cookiehouse.domain.mission.MissionComplete;
 import com.groom.cookiehouse.exception.ErrorCode;
 import com.groom.cookiehouse.exception.SuccessCode;
 import com.groom.cookiehouse.external.client.aws.S3Service;
@@ -18,11 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-//@CrossOrigin("http://127.0.0.1:5173")
 @RequiredArgsConstructor
 @Slf4j
 @RestController
@@ -46,41 +42,32 @@ public class MissionCompleteController {
         return BaseResponse.success(SuccessCode.MISSION_COMPLETE_CREATED_SUCCESS, data);
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{missionCompleteId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse<CreateMissionCompleteResponseDto> updateMissionComplete(
             @UserId Long userId,
+            @PathVariable Long missionCompleteId,
             @Valid @ModelAttribute final MissionCompleteRequestDto requestDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return BaseResponse.error(ErrorCode.REQUEST_VALIDATION_EXCEPTION, ErrorCode.REQUEST_VALIDATION_EXCEPTION.getMessage());
         }
-        MissionComplete missionComplete = missionCompleteService.findMissionComplete(userId, LocalDate.now());
-        s3Service.deleteFile(missionComplete.getImage());
-        String imageUrl = s3Service.uploadImage(requestDto.getMissionCompleteImage(), "mission_complete");
-        final CreateMissionCompleteResponseDto data = missionCompleteService.updateMissionComplete(requestDto, userId, imageUrl);
+
+        final CreateMissionCompleteResponseDto data = missionCompleteService.updateMissionComplete(userId, missionCompleteId, requestDto);
         return BaseResponse.success(SuccessCode.MISSION_COMPLETE_UPDATED_SUCCESS, data);
+    }
+
+    @GetMapping("/{missionCompleteId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse<ReadMissionCompleteResponseDto> getMissionComplete(@PathVariable Long missionCompleteId) {
+        final ReadMissionCompleteResponseDto data = missionCompleteService.findMissionComplete(missionCompleteId);
+        return BaseResponse.success(SuccessCode.GET_MISSION_COMPLETE_SUCCESS, data);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse<ReadMissionCompleteResponseDto> getMissionComplete(@UserId Long userId, @RequestParam String date) {
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
-        MissionComplete missionComplete = missionCompleteService.findMissionComplete(userId, localDate);
-        final ReadMissionCompleteResponseDto data = ReadMissionCompleteResponseDto.of(
-                missionComplete.getId(),
-                missionComplete.getImage(),
-                missionComplete.getContent(),
-                missionComplete.getMission().getDate(),
-                missionComplete.getFurnitureId()
-        );
-        return BaseResponse.success(SuccessCode.GET_MISSION_COMPLETE_SUCCESS, data);
-    }
-
-    @GetMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public BaseResponse<List<ReadMissionCompleteResponseDto>> getAllMissionComplete(@PathVariable Long userId) {
-        final List<ReadMissionCompleteResponseDto> data = missionCompleteService.findAllMissionComplete(userId);
+    public BaseResponse<ReadAllMissionCompleteResponseDto> getAllMissionComplete(@RequestParam Long userId) {
+        final ReadAllMissionCompleteResponseDto data = missionCompleteService.findAllMissionComplete(userId);
         return BaseResponse.success(SuccessCode.GET_MISSION_COMPLETE_SUCCESS, data);
     }
 

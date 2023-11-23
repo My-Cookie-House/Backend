@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin("http://127.0.0.1:5173")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/missions")
@@ -19,8 +18,8 @@ public class MissionController {
 
     @GetMapping("/today-mission")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse<MissionResponseDto> getTodayMission(@UserId Long id) {
-        final MissionResponseDto data = missionService.getTodayMission(id);
+    public BaseResponse<MissionResponseDto> getTodayMission(@UserId Long userId) {
+        final MissionResponseDto data = missionService.getTodayMission(userId);
         return BaseResponse.success(SuccessCode.GET_MISSION_SUCCESS, data);
     }
 

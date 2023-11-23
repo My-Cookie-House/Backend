@@ -2,6 +2,7 @@ package com.groom.cookiehouse.service.mission;
 
 import com.groom.cookiehouse.controller.dto.request.mission.MissionCompleteRequestDto;
 import com.groom.cookiehouse.controller.dto.response.mission.CreateMissionCompleteResponseDto;
+import com.groom.cookiehouse.controller.dto.response.mission.ReadAllMissionCompleteResponseDto;
 import com.groom.cookiehouse.controller.dto.response.mission.ReadMissionCompleteResponseDto;
 import com.groom.cookiehouse.domain.mission.Mission;
 import com.groom.cookiehouse.domain.mission.MissionComplete;
@@ -9,6 +10,7 @@ import com.groom.cookiehouse.domain.user.User;
 import com.groom.cookiehouse.exception.ErrorCode;
 import com.groom.cookiehouse.exception.model.BadRequestException;
 import com.groom.cookiehouse.exception.model.NotFoundException;
+import com.groom.cookiehouse.external.client.aws.S3Service;
 import com.groom.cookiehouse.repository.MissionCompleteRepository;
 import com.groom.cookiehouse.repository.MissionRepository;
 import com.groom.cookiehouse.repository.UserRepository;
@@ -27,6 +29,8 @@ public class MissionCompleteService {
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
     private final MissionCompleteRepository missionCompleteRepository;
+
+    private final S3Service s3Service;
 
     @Transactional
     public CreateMissionCompleteResponseDto createMissionComplete(MissionCompleteRequestDto requestDto, Long userId, String imageUrl) {
@@ -51,22 +55,33 @@ public class MissionCompleteService {
     }
 
     @Transactional
-    public CreateMissionCompleteResponseDto updateMissionComplete(MissionCompleteRequestDto requestDto, Long userId, String imageUrl) {
-        MissionComplete missionComplete = findMissionComplete(userId, LocalDate.now());
+    public CreateMissionCompleteResponseDto updateMissionComplete(Long userId, Long missionCompleteId, MissionCompleteRequestDto requestDto) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER_EXCEPTION, ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage()));
+
+        MissionComplete missionComplete = missionCompleteRepository.findById(missionCompleteId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MISSION_COMPLETE_EXCEPTION, ErrorCode.NOT_FOUND_MISSION_COMPLETE_EXCEPTION.getMessage()));
+
+        s3Service.deleteFile(missionComplete.getImage());
+        String imageUrl = s3Service.uploadImage(requestDto.getMissionCompleteImage(), "mission_complete");
+
         missionComplete.update(imageUrl, requestDto.getMissionCompleteContent(), requestDto.getFurnitureId());
         return CreateMissionCompleteResponseDto.of(missionComplete.getId(), missionComplete.getCreatedAt(), missionComplete.getUpdatedAt());
     }
 
-    public MissionComplete findMissionComplete(Long userId, LocalDate date) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER_EXCEPTION, ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage()));
-        List<Mission> missions = missionRepository.findAllByDate(date);
-        Mission mission = missions.get(0);
-        return missionCompleteRepository.findByUserAndMission(user, mission)
+    public ReadMissionCompleteResponseDto findMissionComplete(Long missionCompleteId) {
+        MissionComplete missionComplete = missionCompleteRepository.findById(missionCompleteId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MISSION_COMPLETE_EXCEPTION, ErrorCode.NOT_FOUND_MISSION_COMPLETE_EXCEPTION.getMessage()));
+        return ReadMissionCompleteResponseDto.of(
+                missionComplete.getId(),
+                missionComplete.getImage(),
+                missionComplete.getContent(),
+                missionComplete.getMission().getDate(),
+                missionComplete.getFurnitureId()
+        );
     }
 
-    public List<ReadMissionCompleteResponseDto> findAllMissionComplete(Long userId) {
+    public ReadAllMissionCompleteResponseDto findAllMissionComplete(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER_EXCEPTION, ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage()));
         List<MissionComplete> missionCompletes = missionCompleteRepository.findAllByUser(user);
@@ -82,7 +97,7 @@ public class MissionCompleteService {
                     )
             );
         }
-        return readMissionCompleteResponseDtos;
+        return ReadAllMissionCompleteResponseDto.of(user.getWallpaper(), readMissionCompleteResponseDtos);
     }
 
 }
