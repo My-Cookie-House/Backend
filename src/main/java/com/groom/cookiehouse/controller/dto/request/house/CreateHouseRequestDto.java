@@ -23,4 +23,7 @@ public class CreateHouseRequestDto {
     @NotBlank
     private String houseName;
 
+    @NotNull
+    private Long wallpaperId;
+
 }

@@ -1,7 +1,7 @@
 package com.groom.cookiehouse.service.guestBook;
 
 import com.groom.cookiehouse.controller.dto.response.guestBook.GetAllGuestBookResponseDto;
-import com.groom.cookiehouse.domain.GuestBook;
+import com.groom.cookiehouse.domain.guestbook.GuestBook;
 import com.groom.cookiehouse.domain.user.User;
 import com.groom.cookiehouse.controller.dto.request.guestBook.GuestBookRequestDto;
 import com.groom.cookiehouse.controller.dto.response.guestBook.GuestBookResponseDto;

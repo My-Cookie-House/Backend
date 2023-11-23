@@ -1,5 +1,6 @@
-package com.groom.cookiehouse.domain;
+package com.groom.cookiehouse.domain.guestbook;
 
+import com.groom.cookiehouse.domain.BaseEntity;
 import com.groom.cookiehouse.domain.user.User;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "GUEST_BOOK")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GuestBook extends BaseEntity{
+public class GuestBook extends BaseEntity {
 
     @Column
     private String author;

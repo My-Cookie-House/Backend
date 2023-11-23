@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -81,7 +83,8 @@ public class S3Service {
 
     // 파일명 (중복 방지)
     private String createFileName(String fileName) {
-        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
+        LocalDateTime localDateTime = LocalDateTime.now();
+        return UUID.randomUUID().toString().concat(getFileExtension(fileName)) + localDateTime;
     }
 
     // 파일 유효성 검사
