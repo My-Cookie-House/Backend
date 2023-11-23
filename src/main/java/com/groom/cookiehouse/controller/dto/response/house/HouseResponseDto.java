@@ -15,9 +15,10 @@ public class HouseResponseDto {
     private Long icingId;
     private List<Long> cookieIds;
     private String houseName;
+    private Long wallpaperId;
 
-    public static HouseResponseDto of(Long icingId, List<Long> cookieIds, String houseName) {
-        return new HouseResponseDto(icingId, cookieIds, houseName);
+    public static HouseResponseDto of(Long icingId, List<Long> cookieIds, String houseName, Long wallpaperId) {
+        return new HouseResponseDto(icingId, cookieIds, houseName, wallpaperId);
     }
 
 }

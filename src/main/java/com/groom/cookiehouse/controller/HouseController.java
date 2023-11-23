@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//@CrossOrigin("http://127.0.0.1:5173")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/house")
@@ -23,7 +22,7 @@ public class HouseController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse createHouse(@UserId Long userId, @RequestBody @Valid final CreateHouseRequestDto requestDto) {
-        houseService.createHouse(userId, requestDto.getIcingId(), requestDto.getCookieIds(), requestDto.getHouseName());
+        houseService.createHouse(userId, requestDto.getIcingId(), requestDto.getCookieIds(), requestDto.getHouseName(), requestDto.getWallpaperId());
         return BaseResponse.success(SuccessCode.HOUSE_CREATED_SUCCESS);
     }
 

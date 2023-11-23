@@ -2,10 +2,9 @@ package com.groom.cookiehouse.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.groom.cookiehouse.domain.BaseEntity;
-import com.groom.cookiehouse.domain.GuestBook;
+import com.groom.cookiehouse.domain.guestbook.GuestBook;
+import com.groom.cookiehouse.domain.mission.MissionComplete;
 import lombok.*;
-import com.groom.cookiehouse.domain.cookie.CookieSelection;
-import com.groom.cookiehouse.domain.icing.IcingSelection;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,20 +34,36 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
-    private List<GuestBook> guestBookList;
-  
     @Column(nullable = true)
     private String houseName;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    List<IcingSelection> icingSelections;
+    @Column(nullable = true)
+    private Long cookieOne;
+
+    @Column(nullable = true)
+    private Long cookieTwo;
+
+    @Column(nullable = true)
+    private Long icing;
+
+    @Column(nullable = true)
+    private Long wallpaper;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    List<CookieSelection> cookieSelections;
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GuestBook> guestBookList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<MissionComplete> missionCompleteList;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    List<IcingSelection> icingSelections;
+//
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    List<CookieSelection> cookieSelections;
 
     @Builder
     public User(String userName, String socialId, SocialType socialType) {
@@ -57,8 +72,12 @@ public class User extends BaseEntity {
         this.socialType = socialType;
     }
 
-    public void updateHouseName(String houseName) {
+    public void updateHouse(String houseName, Long cookieOne, Long cookieTwo, Long icing, Long wallpaper) {
         this.houseName = houseName;
+        this.cookieOne = cookieOne;
+        this.cookieTwo = cookieTwo;
+        this.icing = icing;
+        this.wallpaper = wallpaper;
     }
 
     public void updateRefreshToken(String refreshToken) {
