@@ -18,6 +18,6 @@ IDLE_PROFILE=$(find_idle_profile)
 
 nohup java -jar \
  -Dspring.config.location=/home/ec2-user/app/step1/Backend/src/main/resources/application.yml, \
- /home/ec2-user/app/step1/Backend/src/main/resources/application-$IDLE_PROFILE.yml \
+ /home/ec2-user/app/step3/zip/src/main/resources/application-$IDLE_PROFILE.yml \
  -Dspring.profiles.active=$IDLE_PROFILE \
  /home/ec2-user/app/step3/CookieHouse-0.0.1-SNAPSHOT.jar > /home/ec2-user/app/step3/nohup.out 2>&1 &
