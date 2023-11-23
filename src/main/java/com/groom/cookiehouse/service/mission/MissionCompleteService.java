@@ -73,6 +73,7 @@ public class MissionCompleteService {
         MissionComplete missionComplete = missionCompleteRepository.findById(missionCompleteId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_MISSION_COMPLETE_EXCEPTION, ErrorCode.NOT_FOUND_MISSION_COMPLETE_EXCEPTION.getMessage()));
         return ReadMissionCompleteResponseDto.of(
+                missionComplete.getMission().getMessage(),
                 missionComplete.getId(),
                 missionComplete.getImage(),
                 missionComplete.getContent(),
@@ -89,6 +90,7 @@ public class MissionCompleteService {
         for(MissionComplete missionComplete : missionCompletes) {
             readMissionCompleteResponseDtos.add(
                     ReadMissionCompleteResponseDto.of(
+                            missionComplete.getMission().getMessage(),
                             missionComplete.getId(),
                             missionComplete.getImage(),
                             missionComplete.getContent(),

@@ -23,7 +23,7 @@ spring:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
-            redirect-uri: https://cookiehouse.site/redirect
+            redirect-uri: https://www.cookiehouse.site/redirect
             scope: profile_nickname
         provider:
           google:

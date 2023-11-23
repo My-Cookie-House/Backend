@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadMissionCompleteResponseDto {
 
+    private String missionMessage;
     private Long missionCompleteId;
     private String missionCompleteImage;
     private String missionCompleteContent;
@@ -19,6 +20,7 @@ public class ReadMissionCompleteResponseDto {
     private Long missionCompleteFurnitureId;
 
     public static ReadMissionCompleteResponseDto of(
+            String missionMessage,
             Long missionCompleteId,
             String missionCompleteImage,
             String missionCompleteContent,
@@ -26,6 +28,7 @@ public class ReadMissionCompleteResponseDto {
             Long missionCompleteFurnitureId
     ) {
         return new ReadMissionCompleteResponseDto(
+                missionMessage,
                 missionCompleteId,
                 missionCompleteImage,
                 missionCompleteContent,
