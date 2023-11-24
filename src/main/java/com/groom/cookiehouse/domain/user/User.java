@@ -57,14 +57,6 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MissionComplete> missionCompleteList;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    List<IcingSelection> icingSelections;
-//
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    List<CookieSelection> cookieSelections;
-
     @Builder
     public User(String userName, String socialId, SocialType socialType) {
         this.userName = userName;
