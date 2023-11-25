@@ -16,11 +16,11 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @DynamicInsert // null값이 아닌 필드만을 대상으로 SQL INSERT 문을 생성
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseEntity {
-
     @Column(nullable = false)
     private String userName;
 
@@ -33,6 +33,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+
+    @Column(nullable = false)
+    private String socialToken;
 
     @Column(nullable = true)
     private String houseName;
@@ -71,7 +74,6 @@ public class User extends BaseEntity {
         this.icing = icing;
         this.wallpaper = wallpaper;
     }
-
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }

@@ -39,7 +39,7 @@ public class OAuth2Controller {
 
         // 구글 또는 카카오에 따라 해당 설정 정보 호출
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(provider);
-        OAuth2Service oAuth2Service = new OAuth2Service(restTemplate);
+        OAuth2Service oAuth2Service = new OAuth2Service(restTemplate, httpSession);
         // 해당 정보를 담아서 로그인 페이지 및 동의하기 페이지로 이동
         oAuth2Service.redirectAuthorizePage(clientRegistration, state, response);
     }
@@ -60,7 +60,7 @@ public class OAuth2Controller {
         }
 
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(provider);
-        OAuth2Service oAuth2Service = new OAuth2Service(restTemplate);
+        OAuth2Service oAuth2Service = new OAuth2Service(restTemplate, httpSession);
 
         // 토큰과 유저 정보를 요청
         OAuth2Token oAuth2Token = oAuth2Service.getAccessToken(clientRegistration, oAuth2AuthorizationResponse.getCode(), oAuth2AuthorizationResponse.getState());

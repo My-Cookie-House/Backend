@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OAuth2Token {
-
     private String token;
+    private String socialToken;
     private LocalDateTime expiredAt;
 
 }

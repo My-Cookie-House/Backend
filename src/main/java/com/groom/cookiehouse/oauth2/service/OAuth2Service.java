@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -28,9 +29,11 @@ public class OAuth2Service {
 
     public final Logger log = LoggerFactory.getLogger(this.getClass());
     public final RestTemplate restTemplate;
+    private final HttpSession httpSession;
 
-    public OAuth2Service(RestTemplate restTemplate) {
+    public OAuth2Service(RestTemplate restTemplate, HttpSession httpSession) {
         this.restTemplate = restTemplate;
+        this.httpSession = httpSession;
     }
 
     public void redirectAuthorizePage(ClientRegistration clientRegistration, String state, HttpServletResponse response) throws IOException {
@@ -58,6 +61,7 @@ public class OAuth2Service {
         params.add("state", state);
         params.add("redirect_uri", clientRegistration.getRedirectUri());
         System.out.println("여기4");
+
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
 
         ResponseEntity<String> entity = null;
@@ -69,10 +73,17 @@ public class OAuth2Service {
         }
 
         JsonObject jsonObj = JsonUtils.parse(entity.getBody()).getAsJsonObject();
+        System.out.println("여기6 " + jsonObj); //나옴
+
         String accessToken = jsonObj.get("access_token").getAsString();
+        System.out.println("여기7 " + accessToken); //나옴
+
+        httpSession.setAttribute("accessToken", accessToken);
         LocalDateTime expiredAt = LocalDateTime.now().plusSeconds(jsonObj.get("expires_in").getAsLong());
-        return new OAuth2Token(accessToken, expiredAt);
+        return new OAuth2Token(accessToken, accessToken, expiredAt);
     }
+
+
 
     public OAuth2UserInfo getUserInfo(ClientRegistration clientRegistration, String accessToken) {
         HttpHeaders headers = new HttpHeaders();
