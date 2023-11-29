@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     /**
-     * 404 BAD REQUEST
+     * 400 BAD REQUEST
      * */
     REQUEST_VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다"),
     VALIDATION_REQUEST_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청값이 입력되지 않았습니다."),
@@ -36,7 +36,6 @@ public enum ErrorCode {
      * 401 UNAUTHORIZED
      */
     TOKEN_TIME_EXPIRED_EXCEPTION(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
-    DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "삭제 요청 권한이 없습니다."),
 
     /**
      * 500 INTERNAL SERVER ERROR

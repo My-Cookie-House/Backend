@@ -8,6 +8,7 @@ import com.groom.cookiehouse.controller.dto.response.mission.ReadAllMissionCompl
 import com.groom.cookiehouse.controller.dto.response.mission.ReadMissionCompleteResponseDto;
 import com.groom.cookiehouse.exception.ErrorCode;
 import com.groom.cookiehouse.exception.SuccessCode;
+import com.groom.cookiehouse.exception.model.BadRequestException;
 import com.groom.cookiehouse.external.client.aws.S3Service;
 import com.groom.cookiehouse.service.mission.MissionCompleteService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class MissionCompleteController {
             @Valid @ModelAttribute final MissionCompleteRequestDto requestDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return BaseResponse.error(ErrorCode.REQUEST_VALIDATION_EXCEPTION, ErrorCode.REQUEST_VALIDATION_EXCEPTION.getMessage());
+            throw new BadRequestException(ErrorCode.REQUEST_VALIDATION_EXCEPTION, ErrorCode.REQUEST_VALIDATION_EXCEPTION.getMessage());
         }
 
         String imageUrl = s3Service.uploadImage(requestDto.getMissionCompleteImage(), "mission_complete");
@@ -50,7 +51,7 @@ public class MissionCompleteController {
             @Valid @ModelAttribute final MissionCompleteRequestDto requestDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return BaseResponse.error(ErrorCode.REQUEST_VALIDATION_EXCEPTION, ErrorCode.REQUEST_VALIDATION_EXCEPTION.getMessage());
+            throw new BadRequestException(ErrorCode.REQUEST_VALIDATION_EXCEPTION, ErrorCode.REQUEST_VALIDATION_EXCEPTION.getMessage());
         }
 
         final CreateMissionCompleteResponseDto data = missionCompleteService.updateMissionComplete(userId, missionCompleteId, requestDto);
