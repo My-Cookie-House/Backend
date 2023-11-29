@@ -46,7 +46,7 @@ public class GuestBookService {
 
         String houseName = user.getHouseName();
 
-        List<GuestBook> guestBooks = guestBookRepository.findAllByUser(user);
+        List<GuestBook> guestBooks = guestBookRepository.findAllByUserOrderByCreatedAtDesc(user);
         List<GuestBookResponseDto> guestBookResponseDtos = new ArrayList<>();
         for (GuestBook guestBook : guestBooks) {
             guestBookResponseDtos.add(

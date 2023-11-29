@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface GuestBookRepository extends JpaRepository <GuestBook, Integer> {
 
-    List<GuestBook> findAllByUser(User user);
+    List<GuestBook> findAllByUserOrderByCreatedAtDesc(User user);
 
 }
