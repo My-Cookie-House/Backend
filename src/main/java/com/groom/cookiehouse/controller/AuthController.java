@@ -51,7 +51,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse unlink(@PathVariable String provider, @RequestParam String code, @RequestParam String state, @UserId Long userId) {
         authService.unlink(code, provider, state,userId);
-        return BaseResponse.success(SuccessCode.LOGIN_SUCCESS);
+        return BaseResponse.success(SuccessCode.UNLINK_SUCCESS);
     }
 
 }
