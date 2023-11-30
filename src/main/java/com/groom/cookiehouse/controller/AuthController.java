@@ -47,10 +47,10 @@ public class AuthController {
         authService.signOut(userId);
         return BaseResponse.success(SuccessCode.SIGNOUT_SUCCESS);
     }
-    @GetMapping("/unlink/{provider}")
-    @ResponseStatus(HttpStatus.OK)
-    public BaseResponse unlink(@PathVariable String provider, @RequestParam String code, @RequestParam String state, @UserId Long userId) {
-        authService.unlink(code, provider, state,userId);
+    @DeleteMapping("/unlink")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public BaseResponse unlink(@UserId Long userId) {
+        authService.unlink(userId);
         return BaseResponse.success(SuccessCode.UNLINK_SUCCESS);
     }
 

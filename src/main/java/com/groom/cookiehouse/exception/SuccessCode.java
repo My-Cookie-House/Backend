@@ -19,7 +19,7 @@ public enum SuccessCode {
     GET_MISSION_COMPLETE_SUCCESS(HttpStatus.OK, "미션 수행 내역을 조회했습니다"),
     GET_ALL_MISSON_COMPLETE_SUCCESS(HttpStatus.OK, "미션 수행 내역을 모두 조회했습니다"),
     GET_USER_INFO_SUCCESS(HttpStatus.OK, "사용자 정보 조회에 성공했습니다"),
-    UNLINK_SUCCESS(HttpStatus.OK, "사용자 탈퇴에 성공했습니다"),
+    UNLINK_SUCCESS(HttpStatus.NO_CONTENT, "사용자 탈퇴에 성공했습니다"),
 
     /**
      * 201 CREATED
