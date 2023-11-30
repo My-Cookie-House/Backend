@@ -14,8 +14,14 @@ import com.groom.cookiehouse.exception.ErrorCode;
 import com.groom.cookiehouse.exception.model.NotFoundException;
 import com.groom.cookiehouse.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -68,9 +74,9 @@ public class AuthService {
         userRepository.save(user);
 
         Boolean isHouseBuilt = true;
-	if (user.getHouseName() == null) {
-		isHouseBuilt = false;
-	}
+        if (user.getHouseName() == null) {
+            isHouseBuilt = false;
+        }
         return SignInResponseDto.of(user.getId(), user.getUserName(), accessToken, refreshToken, isRegistered, isHouseBuilt);
     }
 
@@ -95,5 +101,24 @@ public class AuthService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER_EXCEPTION, ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage()));
         user.updateRefreshToken(null);
     }
+    @Transactional
+    public void unlink(String code, String provider, String state, Long userId) {
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(provider); //provider. 서비스 제공자에 대한 등록 정보를 저장하고 검색
+        OAuth2Service oAuth2Service = new OAuth2Service(restTemplate); //OAuth 2.0 프로토콜과 관련된 서비스를 제공하는 클래스
 
+        OAuth2Token oAuth2Token = oAuth2Service.getAccessToken(clientRegistration, code, state); //액세스 토큰을 갖고옴
+        String kakaoAccessToken = oAuth2Token.getToken();
+
+        System.out.println("!!!!!!!!!!!" + kakaoAccessToken);
+        // 카카오에 회원 탈퇴 요청 보내기
+        String unlinkUrl = "https://kapi.kakao.com/v1/user/unlink";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/x-www-form-urlencoded");
+        headers.set("Authorization", "Bearer " + kakaoAccessToken);
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+        RestTemplate restTemplate1 = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate1.exchange(unlinkUrl, HttpMethod.POST, requestEntity, String.class);
+        userRepository.deleteById(userId);
+    }
 }
