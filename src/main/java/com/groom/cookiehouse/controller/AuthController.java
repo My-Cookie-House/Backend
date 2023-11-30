@@ -47,7 +47,7 @@ public class AuthController {
         authService.signOut(userId);
         return BaseResponse.success(SuccessCode.SIGNOUT_SUCCESS);
     }
-    @DeleteMapping("/unlink")
+    @PostMapping("/unlink")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public BaseResponse unlink(@UserId Long userId) {
         authService.unlink(userId);
