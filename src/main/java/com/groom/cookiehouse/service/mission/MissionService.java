@@ -103,7 +103,7 @@ public class MissionService {
             missionCompleteId = missionComplete.get().getId();
         }
         return MissionResponseDto.of(
-                mission.getId(),
+                mission.getId() % 25 + 1,
                 mission.getDate(),
                 mission.getMessage(),
                 missionCompleteId

@@ -12,17 +12,17 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GuestBook extends BaseEntity {
 
-    @Column
+    @Column(nullable = false)
     private String author;
 
-    @Column
+    @Column(length = 500, nullable = false)
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
+    @Column(nullable = false)
     private Long ornamentId;
 
     @Builder
