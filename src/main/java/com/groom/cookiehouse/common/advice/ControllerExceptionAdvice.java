@@ -84,7 +84,7 @@ public class ControllerExceptionAdvice {
      */
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<BaseResponse> handleGroomException(CustomException e) {
-        logger.error("CustomException: {}", e);
+        logger.error("CustomException: {}", e.getMessage());
         return ResponseEntity.status(e.getHttpStatus())
                 .body(BaseResponse.error(e.getErrorCode(), e.getMessage()));
     }
