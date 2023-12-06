@@ -30,7 +30,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
-    implementation 'org.springframework:spring-webmvc:5.3.22'
+    implementation 'org.springframework:spring-webmvc:5.3.30'
 
     // JPA & Database
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
