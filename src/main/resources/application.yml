@@ -12,7 +12,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
   security:
     oauth2:
       client:
@@ -27,7 +27,7 @@ spring:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
-            redirect-uri: https://www.cookiehouse.site/redirect
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             scope: profile_nickname
         provider:
           google:
@@ -60,3 +60,5 @@ logging:
         type:
           descriptor:
             sql:
+      springframework:
+        web: ERROR
