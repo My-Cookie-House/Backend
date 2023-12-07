@@ -39,6 +39,7 @@ public class ControllerExceptionAdvice {
     protected BaseResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         FieldError fieldError = Objects.requireNonNull(e.getFieldError());
         logger.error("Validation error for field {}: {}", fieldError.getField(), fieldError.getDefaultMessage());
+        e.printStackTrace();
         return BaseResponse.error(ErrorCode.VALIDATION_REQUEST_MISSING_EXCEPTION, String.format("%s. (%s)", fieldError.getDefaultMessage(), fieldError.getField()));
     }
 
@@ -46,6 +47,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(MissingRequestHeaderException.class)
     protected BaseResponse handleMissingRequestHeaderException(final MissingRequestHeaderException e) {
         logger.error("Missing Request Header: {}", e.getMessage());
+        e.printStackTrace();
         return BaseResponse.error(ErrorCode.VALIDATION_REQUEST_HEADER_MISSING_EXCEPTION, String.format("%s. (%s)", ErrorCode.VALIDATION_REQUEST_HEADER_MISSING_EXCEPTION.getMessage(), e.getHeaderName()));
     }
 
@@ -53,6 +55,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     protected BaseResponse handleMissingRequestParameterException(final MissingServletRequestParameterException e) {
         logger.error("Missing Request Parameter: {}", e.getMessage());
+        e.printStackTrace();
         return BaseResponse.error(ErrorCode.VALIDATION_REQUEST_PARAMETER_MISSING_EXCEPTION, String.format("%s. (%s)", ErrorCode.VALIDATION_REQUEST_PARAMETER_MISSING_EXCEPTION.getMessage(), e.getParameterName()));
     }
 
@@ -60,6 +63,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected BaseResponse handleHttpRequestMethodNotSupportedException(final HttpRequestMethodNotSupportedException e) {
         logger.error("Http Request Method Not Supported: {}", e.getMessage());
+        e.printStackTrace();
         return BaseResponse.error(ErrorCode.REQUEST_METHOD_VALIDATION_EXCEPTION, e.getMessage());
     }
 
@@ -67,6 +71,7 @@ public class ControllerExceptionAdvice {
     @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public BaseResponse fileSizeLimitExceeded(final MaxUploadSizeExceededException e) {
         logger.error("File Size Limit Exceeded: {}", e.getMessage());
+        e.printStackTrace();
         return BaseResponse.error(ErrorCode.MAX_UPLOAD_SIZE_EXCEED_EXCEPTION, e.getMessage());
     }
 
@@ -77,6 +82,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(Exception.class)
     protected BaseResponse handleException(final Exception error, final HttpServletRequest request) throws IOException {
         logger.error("Internal Server Error: {}", error.getMessage());
+        error.printStackTrace();
         return BaseResponse.error(ErrorCode.INTERNAL_SERVER_ERROR);
     }
     /**
@@ -85,6 +91,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<BaseResponse> handleGroomException(CustomException e) {
         logger.error("CustomException: {}", e.getMessage());
+        e.printStackTrace();
         return ResponseEntity.status(e.getHttpStatus())
                 .body(BaseResponse.error(e.getErrorCode(), e.getMessage()));
     }
