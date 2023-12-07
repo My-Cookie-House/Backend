@@ -94,11 +94,19 @@ public class S3Service {
         }
         ArrayList<String> fileValidate = new ArrayList<>();
         fileValidate.add(".jpg");
-        fileValidate.add(".jpeg");
-        fileValidate.add(".png");
         fileValidate.add(".JPG");
+        fileValidate.add(".jpeg");
         fileValidate.add(".JPEG");
+        fileValidate.add(".png");
         fileValidate.add(".PNG");
+        fileValidate.add(".webp");
+        fileValidate.add(".WebP");
+        fileValidate.add(".heif");
+        fileValidate.add(".HEIF");
+        fileValidate.add(".heic");
+        fileValidate.add(".HEIC");
+        fileValidate.add(".svg");
+        fileValidate.add(".SVG");
         String idxFileName = fileName.substring(fileName.lastIndexOf("."));
         if (!fileValidate.contains(idxFileName)) {
             throw new BadRequestException(ErrorCode.VALIDATION_IMAGE_REQUEST_FAILED, ErrorCode.VALIDATION_IMAGE_REQUEST_FAILED.getMessage());
